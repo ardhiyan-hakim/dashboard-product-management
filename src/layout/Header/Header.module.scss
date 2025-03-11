@@ -1,0 +1,19 @@
+@import "/src/styles/global.scss" ;
+
+.header {
+  background-color: $primary-color;
+  color: white;
+  display: flex;
+  align-items: center;
+  height: 60px;
+
+  .menu-icon {
+    cursor: pointer;
+    margin-right: 1rem;
+  }
+
+  .title {
+    flex-grow: 1;
+    font-size: 1.2rem;
+  }
+}

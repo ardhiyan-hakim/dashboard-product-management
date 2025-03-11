@@ -1,0 +1,23 @@
+@import "/src/styles/global.scss";
+
+.sidebar {
+  width: 250px;
+  background-color: $sidebar-bg;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: transform $transition-speed ease-in-out;
+
+  .menu-item {
+    padding: 0.8rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    transition: background-color $transition-speed;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
