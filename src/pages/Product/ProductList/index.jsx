@@ -15,7 +15,10 @@ import {
   FormControl,
   InputLabel,
   Pagination,
+  IconButton,
 } from "@mui/material";
+import { Link } from "react-router-dom";
+import InfoIcon from "@mui/icons-material/Info";
 import styles from "./ProductList.module.scss";
 
 const ProductList = () => {
@@ -25,7 +28,7 @@ const ProductList = () => {
   const [sortOption, setSortOption] = useState("");
   const [category, setCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+  const itemsPerPage = 5;
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -36,18 +39,15 @@ const ProductList = () => {
     loadProducts();
   }, []);
 
-  // Filter Handler
   useEffect(() => {
     let filtered = products.filter((product) =>
       product.title.toLowerCase().includes(search.toLowerCase())
     );
 
-    // Category
     if (category) {
       filtered = filtered.filter((product) => product.category === category);
     }
 
-    // Sorting
     if (sortOption === "price") {
       filtered = filtered.sort((a, b) => a.price - b.price);
     } else if (sortOption === "name") {
@@ -78,7 +78,7 @@ const ProductList = () => {
       />
 
       <FormControl fullWidth margin="normal">
-        <InputLabel className="input-label">Sort By</InputLabel>
+        <InputLabel>Sort By</InputLabel>
         <Select value={sortOption} onChange={(e) => setSortOption(e.target.value)}>
           <MenuItem value="">None</MenuItem>
           <MenuItem value="price">Price</MenuItem>
@@ -88,7 +88,7 @@ const ProductList = () => {
       </FormControl>
 
       <FormControl fullWidth margin="normal">
-        <InputLabel className="input-label" >Filter by Category</InputLabel>
+        <InputLabel>Filter by Category</InputLabel>
         <Select value={category} onChange={(e) => setCategory(e.target.value)}>
           <MenuItem value="">All</MenuItem>
           {[...new Set(products.map((p) => p.category))].map((cat) => (
@@ -99,7 +99,6 @@ const ProductList = () => {
         </Select>
       </FormControl>
 
-      {/* Product Table */}
       <TableContainer component={Paper} className={styles.table}>
         <Table>
           <TableHead>
@@ -109,23 +108,32 @@ const ProductList = () => {
               <TableCell>Price</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Rating</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {currentProducts.map((product) => (
-              <TableRow key={product.id}>
+              <TableRow key={product.id} className={styles.row}>
                 <TableCell>{product.id}</TableCell>
-                <TableCell>{product.title}</TableCell>
+                <TableCell>
+                  <Link to={`/dashboard/products/${product.id}`} className={styles.link}>
+                    {product.title}
+                  </Link>
+                </TableCell>
                 <TableCell>${product.price}</TableCell>
                 <TableCell>{product.category}</TableCell>
                 <TableCell>{product.rating}</TableCell>
+                <TableCell>
+                  <IconButton component={Link} to={`/dashboard/products/${product.id}`} color="primary">
+                    <InfoIcon />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
 
-      {/* Pagination */}
       <Pagination
         count={Math.ceil(filteredProducts.length / itemsPerPage)}
         page={currentPage}

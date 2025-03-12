@@ -1,16 +1,24 @@
-import { Drawer, List, ListItem, ListItemText } from "@mui/material";
+import { Drawer, List, ListItem, ListItemText, ListItemIcon } from "@mui/material";
 import { Link } from "react-router-dom";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import styles from "./Sidebar.module.scss";
 
 const Sidebar = ({ open, onClose }) => {
   return (
     <Drawer anchor="left" open={open} onClose={onClose}>
       <div className={styles.sidebar}>
-        <List sx={{ width: 250 }}>
-          <ListItem component={Link} to="/dashboard" onClick={onClose}>
+        <List>
+          <ListItem button component={Link} to="/dashboard" onClick={onClose}>
+            <ListItemIcon>
+              <DashboardIcon />
+            </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItem component={Link} to="/dashboard/products" onClick={onClose}>
+          <ListItem button component={Link} to="/dashboard/products" onClick={onClose}>
+            <ListItemIcon>
+              <ShoppingCartIcon />
+            </ListItemIcon>
             <ListItemText primary="Products" />
           </ListItem>
         </List>
