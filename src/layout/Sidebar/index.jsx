@@ -9,13 +9,13 @@ const Sidebar = ({ open, onClose }) => {
     <Drawer anchor="left" open={open} onClose={onClose}>
       <div className={styles.sidebar}>
         <List>
-          <ListItem button component={Link} to="/dashboard" onClick={onClose}>
+          <ListItem component={Link} to="/dashboard" onClick={onClose}>
             <ListItemIcon>
               <DashboardIcon />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </ListItem>
-          <ListItem button component={Link} to="/dashboard/products" onClick={onClose}>
+          <ListItem component={Link} to="/dashboard/products" onClick={onClose}>
             <ListItemIcon>
               <ShoppingCartIcon />
             </ListItemIcon>
