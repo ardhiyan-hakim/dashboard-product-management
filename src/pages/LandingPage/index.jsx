@@ -12,21 +12,13 @@ import {
   Pagination,
 } from "@mui/material";
 import styles from "./LandingPage.module.scss";
+import { useProducts } from "../../context/ProductContext";
 
 const LandingPage = () => {
-  const [products, setProducts] = useState([]);
+  const { products } = useProducts();
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 15;
 
-  useEffect(() => {
-    const loadProducts = async () => {
-      const data = await fetchProducts();
-      setProducts(data);
-    };
-    loadProducts();
-  }, []);
-
-  // Pagination logic
   const indexOfLastProduct = currentPage * itemsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
   const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);

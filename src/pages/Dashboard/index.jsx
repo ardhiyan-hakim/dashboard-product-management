@@ -30,11 +30,12 @@ const DashboardPage = () => {
         Dashboard
       </Typography>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={3} justifyContent="center">
         <Grid
           item
           xs={12}
           md={6}
+          lg={4}
           sx={{ padding: "1.5rem", marginBottom: "1rem" }}
         >
           <Typography variant="h6" align="center">
@@ -46,6 +47,7 @@ const DashboardPage = () => {
           item
           xs={12}
           md={6}
+          lg={4}
           sx={{ padding: "1.5rem", marginBottom: "1rem" }}
         >
           <Typography variant="h6" align="center">
@@ -57,6 +59,7 @@ const DashboardPage = () => {
           item
           xs={12}
           md={6}
+          lg={4}
           sx={{ padding: "1.5rem", marginBottom: "1rem" }}
         >
           <Typography variant="h6" align="center">

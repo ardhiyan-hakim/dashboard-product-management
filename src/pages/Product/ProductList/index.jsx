@@ -29,6 +29,7 @@ import {
   IconButton,
   CircularProgress,
   Typography,
+  Grid
 } from "@mui/material";
 import { motion } from "framer-motion";
 
@@ -230,54 +231,58 @@ const ProductList = () => {
         Add Product
       </MotionButton>
 
-      <TableContainer component={Paper} className={styles.table}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Title</TableCell>
-              <TableCell>Price</TableCell>
-              <TableCell>Category</TableCell>
-              <TableCell>Rating</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {currentProducts.map((product) => (
-              <motion.tr key={product.id} className={styles.row}>
-                <TableCell>{product.id}</TableCell>
-                <TableCell>
-                  <Link
-                    to={`/dashboard/products/${product.id}`}
-                    className={styles.link}
-                  >
-                    {product.title}
-                  </Link>
-                </TableCell>
-                <TableCell>${product.price}</TableCell>
-                <TableCell>{product.category}</TableCell>
-                <TableCell>{product.rating}</TableCell>
-                <TableCell className={styles.actions}>
-                  <IconButton
-                    color="primary"
-                    size="small"
-                    onClick={() => handleEditProduct(product)}
-                  >
-                    <EditIcon size="small" />
-                  </IconButton>
-                  <IconButton
-                    color="error"
-                    size="small"
-                    onClick={() => handleDeleteProduct(product.id)}
-                  >
-                    <DeleteIcon size="small" />
-                  </IconButton>{" "}
-                </TableCell>
-              </motion.tr>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Grid container spacing={2} justifyContent="center">
+        <Grid item xs={12}>
+          <TableContainer component={Paper} className={styles.table}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Title</TableCell>
+                  <TableCell>Price</TableCell>
+                  <TableCell>Category</TableCell>
+                  <TableCell>Rating</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {currentProducts.map((product) => (
+                  <motion.tr key={product.id} className={styles.row}>
+                    <TableCell>{product.id}</TableCell>
+                    <TableCell>
+                      <Link
+                        to={`/dashboard/products/${product.id}`}
+                        className={styles.link}
+                      >
+                        {product.title}
+                      </Link>
+                    </TableCell>
+                    <TableCell>${product.price}</TableCell>
+                    <TableCell>{product.category}</TableCell>
+                    <TableCell>{product.rating}</TableCell>
+                    <TableCell className={styles.actions}>
+                      <IconButton
+                        color="primary"
+                        size="small"
+                        onClick={() => handleEditProduct(product)}
+                      >
+                        <EditIcon size="small" />
+                      </IconButton>
+                      <IconButton
+                        color="error"
+                        size="small"
+                        onClick={() => handleDeleteProduct(product.id)}
+                      >
+                        <DeleteIcon size="small" />
+                      </IconButton>{" "}
+                    </TableCell>
+                  </motion.tr>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+      </Grid>
 
       <Pagination
         count={Math.ceil(filteredProducts.length / itemsPerPage)}
