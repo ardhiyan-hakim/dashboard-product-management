@@ -27,3 +27,7 @@ This is a React-based Product Management Dashboard with authentication, data vis
 * Data visualization using Chart.js
 * Responsive UI with Material UI
 * Global state management with Context API
+
+### Lacking
+* Some Elements and Pages still not Responsive
+* The UI might give you eye damage
