@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useProducts } from "../../../context/ProductContext";
 import {
   fetchProducts,
   addProduct,
@@ -39,7 +40,7 @@ import { Link } from "react-router-dom";
 import styles from "./ProductList.module.scss";
 
 const ProductList = () => {
-  const [products, setProducts] = useState([]);
+  const { products, setProducts, loading } = useProducts();
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [search, setSearch] = useState("");
   const [sortOption, setSortOption] = useState("");
@@ -56,25 +57,8 @@ const ProductList = () => {
     category: "",
     rating: 0,
   });
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const MotionButton = motion.create(Button);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        const data = await fetchProducts();
-        setProducts(data);
-        setFilteredProducts(data);
-      } catch (err) {
-        setError("Failed to fetch products.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadProducts();
-  }, []);
 
   useEffect(() => {
     let filtered = products.filter((product) =>

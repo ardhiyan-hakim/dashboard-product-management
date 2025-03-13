@@ -1,21 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useProducts } from "../../context/ProductContext";
 import { fetchProducts } from "../../services/productService";
-import { Box, Typography, CircularProgress } from "@mui/material";
-import ProductChart from "../../components/ProductChart";
+import { Box, Typography, CircularProgress, Grid } from "@mui/material";
+
+import TotalProductsChart from "../../components/TotalProductCharts";
+import AveragePriceChart from "../../components/AveragePriceChart";
+import RatingDistributionChart from "../../components/RatingDistributorChart";
+
 import styles from "./Dashboard.module.scss";
 
 const DashboardPage = () => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const loadProducts = async () => {
-      const data = await fetchProducts();
-      setProducts(data);
-      setLoading(false);
-    };
-    loadProducts();
-  }, []);
+  const { products, loading } = useProducts();
 
   if (loading) {
     return (
@@ -27,8 +22,49 @@ const DashboardPage = () => {
 
   return (
     <Box className={styles.container}>
-      <Typography variant="h4" className={styles.title}>Dashboard</Typography>
-      <ProductChart products={products} />
+      <Typography
+        variant="h4"
+        className={styles.title}
+        sx={{ marginBottom: "2rem" }}
+      >
+        Dashboard
+      </Typography>
+
+      <Grid container spacing={3}>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{ padding: "1.5rem", marginBottom: "1rem" }}
+        >
+          <Typography variant="h6" align="center">
+            Total Products Per Category
+          </Typography>
+          <TotalProductsChart products={products} />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{ padding: "1.5rem", marginBottom: "1rem" }}
+        >
+          <Typography variant="h6" align="center">
+            Average Price Per Category
+          </Typography>
+          <AveragePriceChart products={products} />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{ padding: "1.5rem", marginBottom: "1rem" }}
+        >
+          <Typography variant="h6" align="center">
+            Rating Distribution Per Category
+          </Typography>
+          <RatingDistributionChart products={products} />
+        </Grid>
+      </Grid>
     </Box>
   );
 };
