@@ -22,7 +22,7 @@ const routes = [
     path: "/dashboard",
     element: <Layout />,
     children: [
-      { index: true, element: <Dashboard /> },
+      { path: "", element: <Dashboard />, index: true },
       { path: "products", element: <ProductList /> },
       { path: "products/:id", element: <ProductDetail /> },
       { path: "*", element: <Navigate to="/dashboard" /> },

@@ -1,47 +1,36 @@
-import { Box, Grid, Card, CardContent, Typography } from "@mui/material";
-import ProductChart from "/src/components/ProductChart";
+import { useEffect, useState } from "react";
+import { fetchProducts } from "../../services/productService";
+import { Box, Typography, CircularProgress } from "@mui/material";
+import ProductChart from "../../components/ProductChart";
 import styles from "./Dashboard.module.scss";
 
-const Dashboard = () => {
+const DashboardPage = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      const data = await fetchProducts();
+      setProducts(data);
+      setLoading(false);
+    };
+    loadProducts();
+  }, []);
+
+  if (loading) {
+    return (
+      <Box className={styles.loader}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
-    <Box className={styles.dashboard}>
-      <Typography variant="h5" className={styles.title}>
-        Dashboard Overview
-      </Typography>
-
-      <Grid container spacing={2}>
-        {/* Total Products */}
-        <Grid item xs={12} sm={6} md={3}>
-          <Card className={styles.card}>
-            <CardContent>
-              <Typography variant="h6">Total Products</Typography>
-              <Typography variant="h4">120</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Average Price */}
-        <Grid item xs={12} sm={6} md={3}>
-          <Card className={styles.card}>
-            <CardContent>
-              <Typography variant="h6">Avg. Price</Typography>
-              <Typography variant="h4">$50</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-
-        {/* Rating Distribution */}
-        <Grid item xs={12} md={6}>
-          <Card className={styles.card}>
-            <CardContent>
-              <Typography variant="h6">Rating Distribution</Typography>
-              <ProductChart />
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
+    <Box className={styles.container}>
+      <Typography variant="h4" className={styles.title}>Dashboard</Typography>
+      <ProductChart products={products} />
     </Box>
   );
 };
 
-export default Dashboard;
+export default DashboardPage;

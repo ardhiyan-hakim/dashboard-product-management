@@ -1,16 +1,17 @@
 @import "/src/styles/global.scss";
 
-.dashboard {
-  padding: 1rem;
+.container {
+  padding: 2rem;
+}
 
-  .title {
-    margin-bottom: 1rem;
-  }
+.title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
 
-  .card {
-    background-color: $sidebar-bg;
-    padding: 1rem;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
+.card {
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem;
+  text-align: center;
 }
