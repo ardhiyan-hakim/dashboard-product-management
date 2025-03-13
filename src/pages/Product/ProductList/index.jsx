@@ -29,6 +29,7 @@ import {
   CircularProgress,
   Typography,
 } from "@mui/material";
+import { motion } from "framer-motion";
 
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -53,9 +54,11 @@ const ProductList = () => {
     title: "",
     price: "",
     category: "",
+    rating: 0,
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const MotionButton = motion.create(Button);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -102,12 +105,25 @@ const ProductList = () => {
   );
 
   const handleAddProduct = async () => {
-    const addedProduct = await addProduct(newProduct);
+    if (
+      !newProduct.title.trim() ||
+      !newProduct.price.trim() ||
+      !newProduct.category.trim()
+    ) {
+      alert("All fields are required!");
+      return;
+    }
+
+    const newId =
+      products.length > 0 ? Math.max(...products.map((p) => p.id)) + 1 : 31;
+    const addedProduct = await addProduct({ ...newProduct, id: newId });
 
     if (addedProduct) {
-      setProducts([addedProduct, ...products]);
+      const productFixedId = { ...addedProduct, id: newId };
+
+      setProducts([...products, productFixedId]);
       setIsAddOpen(false);
-      setNewProduct({ title: "", price: "", category: "" });
+      setNewProduct({ title: "", price: "", category: "", rating: 0 });
     }
   };
 
@@ -118,14 +134,34 @@ const ProductList = () => {
 
   const handleUpdateProduct = async () => {
     if (!selectedProduct) return;
-    const updatedProduct = await updateProduct(
-      selectedProduct.id,
-      selectedProduct
-    );
+    if (
+      !selectedProduct.title.trim() ||
+      !selectedProduct.price.trim() ||
+      !selectedProduct.category.trim()
+    ) {
+      alert("All fields are required!");
+      return;
+    }
 
-    if (updatedProduct) {
+    if (selectedProduct.id <= 30) {
+      const updatedProduct = await updateProduct(
+        selectedProduct.id,
+        selectedProduct
+      );
+
+      if (updatedProduct) {
+        setProducts(
+          products.map((p) =>
+            p.id === selectedProduct.id ? updatedProduct : p
+          )
+        );
+        setIsEditOpen(false);
+      } else {
+        alert("Failed to update product. The item may not exist.");
+      }
+    } else {
       setProducts(
-        products.map((p) => (p.id === selectedProduct.id ? updatedProduct : p))
+        products.map((p) => (p.id === selectedProduct.id ? selectedProduct : p))
       );
       setIsEditOpen(false);
     }
@@ -198,15 +234,17 @@ const ProductList = () => {
         </Select>
       </FormControl>
 
-      <Button
+      <MotionButton
         variant="contained"
         color="primary"
         startIcon={<AddIcon />}
         onClick={() => setIsAddOpen(true)}
         className={styles.addButton}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
         Add Product
-      </Button>
+      </MotionButton>
 
       <TableContainer component={Paper} className={styles.table}>
         <Table>
@@ -222,7 +260,7 @@ const ProductList = () => {
           </TableHead>
           <TableBody>
             {currentProducts.map((product) => (
-              <TableRow key={product.id} className={styles.row}>
+              <motion.tr key={product.id} className={styles.row}>
                 <TableCell>{product.id}</TableCell>
                 <TableCell>
                   <Link
@@ -251,7 +289,7 @@ const ProductList = () => {
                     <DeleteIcon size="small" />
                   </IconButton>{" "}
                 </TableCell>
-              </TableRow>
+              </motion.tr>
             ))}
           </TableBody>
         </Table>
@@ -264,7 +302,16 @@ const ProductList = () => {
         sx={{ display: "flex", justifyContent: "center", mt: 2, mx: "auto" }}
       />
 
-      <Dialog open={isAddOpen} onClose={() => setIsAddOpen(false)}>
+      <Dialog
+        open={isAddOpen}
+        onClose={() => setIsAddOpen(false)}
+        sx={{
+          "& .MuiPaper-root": {
+            transform: "scale(0.9)",
+            transition: "transform 0.2s ease-in-out",
+          },
+        }}
+      >
         <DialogTitle>Add Product</DialogTitle>
 
         <DialogContent>
@@ -298,6 +345,16 @@ const ProductList = () => {
               setNewProduct({ ...newProduct, category: e.target.value })
             }
           />
+
+          <TextField
+            label="Rating"
+            fullWidth
+            margin="dense"
+            value={newProduct.rating}
+            onChange={(e) =>
+              setNewProduct({ ...newProduct, rating: e.target.value })
+            }
+          />
         </DialogContent>
 
         <DialogActions>
@@ -312,7 +369,16 @@ const ProductList = () => {
         </DialogActions>
       </Dialog>
 
-      <Dialog open={isEditOpen} onClose={() => setIsEditOpen(false)}>
+      <Dialog
+        open={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+        sx={{
+          "& .MuiPaper-root": {
+            transform: "scale(0.9)",
+            transition: "transform 0.2s ease-in-out",
+          },
+        }}
+      >
         <DialogTitle>Edit Product</DialogTitle>
         <DialogContent>
           <TextField
@@ -343,6 +409,18 @@ const ProductList = () => {
               setSelectedProduct({
                 ...selectedProduct,
                 category: e.target.value,
+              })
+            }
+          />
+          <TextField
+            label="Rating"
+            fullWidth
+            margin="dense"
+            value={selectedProduct?.rating || 0}
+            onChange={(e) =>
+              setSelectedProduct({
+                ...selectedProduct,
+                rating: e.target.value,
               })
             }
           />
